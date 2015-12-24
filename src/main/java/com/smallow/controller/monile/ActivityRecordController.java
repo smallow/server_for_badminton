@@ -52,6 +52,8 @@ public class ActivityRecordController {
             }
         }
 
+        System.out.println("");
+
         if (memberId.length > 0) {
             Member member = new Member();
             member.set$in_id(memberId);
