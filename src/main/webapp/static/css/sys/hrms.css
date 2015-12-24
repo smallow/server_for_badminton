@@ -1,0 +1,39 @@
+@charset "utf-8";
+/* CSS Document */
+
+.loginbg{background:url(/static/images/smallow/common/loginBg.jpg) repeat-x top center}
+.loginFormArea{font-size:14px}
+.inputStyle{width:240px;height:30px;padding:4px;line-height:30px;border-radius:3px;border:1px solid #D2D2D2;background:#fff;}
+.loginLogo{height:115px;width:689px; margin-bottom:50px;background:url(/static/images/smallow/common/login_logo.png) no-repeat}
+.loginBtn{display:block;width:143px;height:44px; background:url(/static/images/smallow/common/loginBtn.jpg) no-repeat;margin-right:10px;float:left;}
+.remberMe{line-height:40px;}
+.remberMe input{vertical-align:middle}
+.loginArea{position:absolute;margin-top:-190px;margin-left:-345px;top:50%;left:50%;width:689px;height:375px;}
+
+.sysTop{height:50px;background:url(/static/images/smallow/common/top_bg.jpg) repeat-x;}
+.exitSys{background:url(/static/images/smallow/common/icon_exit.gif) no-repeat 6px 3px;padding:8px 0px;padding-left:30px;color:#000}
+.sysLogo{width:556px;height:50px;background:url(/static/images/smallow/common/top.jpg) no-repeat}
+.sysRight{float:right;margin-top:20px;margin-right:10px;width:500px; text-align:right;font-size:12px;color:#1F6C9A}
+
+
+.homepageTitle{height:78px;width:265px;background:url(/static/images/smallow/common/homepageTitle.jpg) 20px 20px no-repeat}
+.homepageTitleBg{background:url(/static/images/smallow/common/homepage_bg.jpg) no-repeat top right}
+.homepageBg{background:url(/static/images/smallow/common/homepage_bg1.jpg) no-repeat;width:154px;height:177px;position:absolute;right:50px;bottom:20px;}
+.titleBorder{margin-left:20px;border-bottom:1px solid #E38800;}
+.iconArea{margin:90px auto;width:90%;}
+.iconArea div{width:133px;height:98px;float:left;margin-right:27px;padding-top:70px;text-align:center;color:#228C00; cursor:pointer;font-size:12px;}
+.iconArea div.icon1{background:url(/static/images/smallow/common/icon_r1_c1.jpg) no-repeat}
+.iconArea div.icon2{background:url(/static/images/smallow/common/icon_r1_c4.jpg) no-repeat}
+.iconArea div.icon3{background:url(/static/images/smallow/common/icon_r1_c6.jpg) no-repeat}
+.iconArea div.icon4{background:url(/static/images/smallow/common/icon_r1_c8.jpg) no-repeat}
+.iconArea div.icon5{background:url(/static/images/smallow/common/icon_r1_c10.jpg) no-repeat}
+.iconArea div.icon6{background:url(/static/images/smallow/common/icon_r1_c13.jpg) no-repeat}
+.iconArea div,.iconArea a{color:#228C00;font-size:12px;text-decoration: none;}
+
+
+.tableStyle{width:98%;margin:0 auto; border-collapse:collapse;border:1px solid #AED0EA;}
+.tableStyle thead td{height:33px; background:url(titleBg.jpg) no-repeat;text-align:center;font-weight:bold;color:#AED0EA;}
+.tableStyle td{height:25px;border:1px solid #D3DDE7;padding:3px; color:#0D2C5F; font-size:12px;}
+.tableStyle td.colStyle{font-weight:bold; text-align:center;color:#6E6E6E}
+.tableTitle{width:98%;margin:0 auto;text-align:center;height:50px;line-height:50px;font-size:21px;font-family:Arial,Tahoma,"\5fae\8f6f\96c5\9ed1","\5B8B\4F53","STXihei";color:#7E95B6;}
+.tdStyle{height:33px; background:url(/static/images/smallow/common/titleBg.jpg) no-repeat;text-align:center; font-weight:bold}

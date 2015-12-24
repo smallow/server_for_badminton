@@ -1,0 +1,28 @@
+.navlist {
+    list-style-type: none;
+    margin: 0px;
+    padding: 10px;
+}
+.navlist li {
+    padding: 0px;
+    display: list-item;
+    text-align: -webkit-match-parent;
+}
+.navlist li a {
+    line-height: 24px;
+    text-decoration: none;
+}
+
+.navlist li A:visited {
+    COLOR: #0000ff;
+    TEXT-DECORATION: none
+}
+.navlist li A:hover {
+    COLOR: red;
+    text-decoration: underline;
+}
+.navlist li A:active {
+    COLOR: green;
+    text-decoration: underline;
+}
+
