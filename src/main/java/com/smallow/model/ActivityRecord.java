@@ -55,6 +55,8 @@ public class ActivityRecord extends ActivityRecordParameter {
     @Column
     private String memberIds;//报名人id串
 
+    @Column
+    private String venue;//球馆
 
     public Integer getId() {
         return id;
@@ -168,5 +170,13 @@ public class ActivityRecord extends ActivityRecordParameter {
 
     public void setMemberIds(String memberIds) {
         this.memberIds = memberIds;
+    }
+
+    public String getVenue() {
+        return venue;
+    }
+
+    public void setVenue(String venue) {
+        this.venue = venue;
     }
 }
