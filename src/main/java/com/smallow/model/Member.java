@@ -33,6 +33,17 @@ public class Member extends MemberParameter implements Serializable{
     @Temporal(TemporalType.TIMESTAMP)
     private Date joinTime;
 
+    @Column
+    private Integer groupId;//群id
+
+    public Integer getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Integer groupId) {
+        this.groupId = groupId;
+    }
+
     public Integer getId() {
         return id;
     }

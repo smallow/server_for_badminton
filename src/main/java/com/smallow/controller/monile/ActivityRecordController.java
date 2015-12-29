@@ -55,7 +55,7 @@ public class ActivityRecordController {
                 }
             }
 
-            System.out.println("");
+           // System.out.println("");
 
             if (memberId.length > 0) {
                 Member member = new Member();
@@ -101,6 +101,11 @@ public class ActivityRecordController {
         ResponseUtils.renderJson(response, json);
     }
 
+
+    @RequestMapping(value = "/registrateTodayActivity.do", method = {RequestMethod.POST, RequestMethod.GET})
+    public void registrateTodayActivity(HttpServletRequest request, HttpServletResponse response) throws ParseException {
+
+    }
 
     private String getWeekDayByDate(Date date) {
         String[] weekDays = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
