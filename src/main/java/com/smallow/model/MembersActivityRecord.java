@@ -1,8 +1,11 @@
 package com.smallow.model;
 
 import com.smallow.model.param.MembersActivityRecordParameter;
+import core.support.DateTimeSerializer;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import javax.persistence.*;
+import java.util.Date;
 
 
 /**
@@ -24,6 +27,10 @@ public class MembersActivityRecord extends MembersActivityRecordParameter {
 
     @Column
     private Integer groupId;//群id
+
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createTime;//报名时间
 
     public Integer getId() {
         return id;
@@ -55,5 +62,14 @@ public class MembersActivityRecord extends MembersActivityRecordParameter {
 
     public void setGroupId(Integer groupId) {
         this.groupId = groupId;
+    }
+
+    @JsonSerialize(using = DateTimeSerializer.class)
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

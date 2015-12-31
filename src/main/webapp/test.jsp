@@ -4,6 +4,7 @@
 <%@ page import="java.sql.Connection" %>
 <%@ page import="org.apache.commons.dbutils.QueryRunner" %>
 <%@ page import="org.apache.commons.dbutils.DbUtils" %>
+<%@ page import="core.util.MD5" %>
 <%--
   Created by IntelliJ IDEA.
   User: smallow
@@ -14,8 +15,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
 
-  String name="汉子";
-  //String sql="insert into tb_merchant (name,address,telphone,mobilephone,contactpersoname,regno,type,bigtype,midtype,pwd) values (?,?,?,?,?,?,?,?,?,?)";
+    //String name="汉子";
+    //String sql="insert into tb_merchant (name,address,telphone,mobilephone,contactpersoname,regno,type,bigtype,midtype,pwd) values (?,?,?,?,?,?,?,?,?,?)";
+/*
 String sql="insert into tb_test (name) values (?)";
   ApplicationContext ap= WebApplicationContextUtils.getWebApplicationContext(application);
   DataSource dataSource=(DataSource)ap.getBean("dataSource");
@@ -29,6 +31,16 @@ String sql="insert into tb_test (name) values (?)";
   }finally {
     DbUtils.close(connection);
   }
+*/
 
+    String str = request.getParameter("str");
+    if (str != null) {
+        out.write(MD5.crypt(str));
+    }
 
 %>
+<form action="test.jsp" method="get">
+    <input type="text" name="str" value=""/>
+    <input type="submit" value="加密"/>
+
+</form>

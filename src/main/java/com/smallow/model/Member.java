@@ -36,6 +36,13 @@ public class Member extends MemberParameter implements Serializable{
     @Column
     private Integer groupId;//群id
 
+    @Column
+    private String mobile;//手机号
+
+    @Column
+    private String roleType;//会员角色  0群主 1管理  2会员 4游客
+
+
     public Integer getGroupId() {
         return groupId;
     }
@@ -82,5 +89,21 @@ public class Member extends MemberParameter implements Serializable{
 
     public void setJoinTime(Date joinTime) {
         this.joinTime = joinTime;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getRoleType() {
+        return roleType;
+    }
+
+    public void setRoleType(String roleType) {
+        this.roleType = roleType;
     }
 }

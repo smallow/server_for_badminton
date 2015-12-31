@@ -6,8 +6,10 @@ import com.smallow.bean.ApiResponse;
 import com.smallow.bean.RegistrationPersonBean;
 import com.smallow.model.ActivityRecord;
 import com.smallow.model.Member;
+import com.smallow.model.MembersActivityRecord;
 import com.smallow.service.ActivityRecordService;
 import com.smallow.service.MemberService;
+import com.smallow.service.MembersActivityRecordService;
 import core.util.ResponseUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,19 +37,30 @@ public class ActivityRecordController {
     private ActivityRecordService activityRecordService;
 
     @Resource
+    private MembersActivityRecordService membersActivityRecordService;
+
+    @Resource
     private MemberService memberService;
 
     @RequestMapping(value = "/getTodayActivityRecord.do", method = {RequestMethod.POST, RequestMethod.GET})
-    public void getTodayActivityRecord(HttpServletRequest request, HttpServletResponse response) throws ParseException {
+    public void getTodayActivityRecord(HttpServletRequest request, HttpServletResponse response,Integer groupId) throws ParseException {
 
         ApiResponse<ActivityRecordBean> apiResponse;
 
-        ActivityRecord activityRecord = activityRecordService.getByProerties("date", format.parse(format.format(new Date())));
+        ActivityRecord activityRecord = activityRecordService.getByProerties(new String[]{"date","groupId"}, new Object[]{format.parse(format.format(new Date()))});
+        //String memberIds = activityRecord.getMemberIds();
+        String memberIds = "";
         if (activityRecord != null) {
-            String memberIds = activityRecord.getMemberIds();
+            List<MembersActivityRecord> registrationMembersList=membersActivityRecordService.queryByProerties("activity_record_id",activityRecord.getId());
+            if(registrationMembersList!=null && registrationMembersList.size()>0){
+                for(MembersActivityRecord record:registrationMembersList){
+                    memberIds+=record.getMember_id()+",";
+                }
+            }
+
             Integer[] memberId = new Integer[]{};
             List<Member> memberList = null;
-            if (memberIds != null) {
+            if (memberIds != null && !"".equals(memberIds)) {
                 String[] _memberIds = memberIds.split(",");
                 memberId = new Integer[_memberIds.length];
                 for (int i = 0; i < _memberIds.length; i++) {
@@ -103,7 +116,30 @@ public class ActivityRecordController {
 
 
     @RequestMapping(value = "/registrateTodayActivity.do", method = {RequestMethod.POST, RequestMethod.GET})
-    public void registrateTodayActivity(HttpServletRequest request, HttpServletResponse response) throws ParseException {
+    public void registrateTodayActivity(HttpServletRequest request, HttpServletResponse response,Integer memberId,Integer activityRecordId,Integer groupId) throws ParseException {
+        ApiResponse<Void> apiResponse=null;
+
+        try{
+            MembersActivityRecord membersActivityRecord=membersActivityRecordService.getByProerties("activity_record_id",activityRecordId);
+            if(membersActivityRecord==null){
+                membersActivityRecord =new MembersActivityRecord();
+                membersActivityRecord.setMember_id(memberId);
+                membersActivityRecord.setActivity_record_id(activityRecordId);
+                membersActivityRecord.setGroupId(groupId);
+                membersActivityRecord.setCreateTime(new Date());
+                membersActivityRecordService.persist(membersActivityRecord);
+                apiResponse=new ApiResponse<Void>("0","success");
+            }else{
+                apiResponse=new ApiResponse<Void>("1","请不要重复报名!");
+            }
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+            apiResponse=new ApiResponse<Void>("1","fail");
+        }
+        String json = JSON.toJSONString(apiResponse);
+        ResponseUtils.renderJson(response, json);
 
     }
 
