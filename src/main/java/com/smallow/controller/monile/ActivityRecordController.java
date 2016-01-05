@@ -43,18 +43,18 @@ public class ActivityRecordController {
     private MemberService memberService;
 
     @RequestMapping(value = "/getTodayActivityRecord.do", method = {RequestMethod.POST, RequestMethod.GET})
-    public void getTodayActivityRecord(HttpServletRequest request, HttpServletResponse response,Integer groupId) throws ParseException {
+    public void getTodayActivityRecord(HttpServletRequest request, HttpServletResponse response, Integer groupId) throws ParseException {
 
         ApiResponse<ActivityRecordBean> apiResponse;
 
-        ActivityRecord activityRecord = activityRecordService.getByProerties(new String[]{"date","groupId"}, new Object[]{format.parse(format.format(new Date()))});
+        ActivityRecord activityRecord = activityRecordService.getByProerties(new String[]{"date", "groupId"}, new Object[]{format.parse(format.format(new Date())), groupId});
         //String memberIds = activityRecord.getMemberIds();
         String memberIds = "";
         if (activityRecord != null) {
-            List<MembersActivityRecord> registrationMembersList=membersActivityRecordService.queryByProerties("activity_record_id",activityRecord.getId());
-            if(registrationMembersList!=null && registrationMembersList.size()>0){
-                for(MembersActivityRecord record:registrationMembersList){
-                    memberIds+=record.getMember_id()+",";
+            List<MembersActivityRecord> registrationMembersList = membersActivityRecordService.queryByProerties("activity_record_id", activityRecord.getId());
+            if (registrationMembersList != null && registrationMembersList.size() > 0) {
+                for (MembersActivityRecord record : registrationMembersList) {
+                    memberIds += record.getMember_id() + ",";
                 }
             }
 
@@ -68,7 +68,7 @@ public class ActivityRecordController {
                 }
             }
 
-           // System.out.println("");
+            // System.out.println("");
 
             if (memberId.length > 0) {
                 Member member = new Member();
@@ -116,28 +116,78 @@ public class ActivityRecordController {
 
 
     @RequestMapping(value = "/registrateTodayActivity.do", method = {RequestMethod.POST, RequestMethod.GET})
-    public void registrateTodayActivity(HttpServletRequest request, HttpServletResponse response,Integer memberId,Integer activityRecordId,Integer groupId) throws ParseException {
-        ApiResponse<Void> apiResponse=null;
+    public void registrateTodayActivity(HttpServletRequest request, HttpServletResponse response, Integer memberId, Integer activityRecordId, Integer groupId) throws ParseException {
+        ApiResponse<Void> apiResponse = null;
 
-        try{
-            MembersActivityRecord membersActivityRecord=membersActivityRecordService.getByProerties("activity_record_id",activityRecordId);
-            if(membersActivityRecord==null){
-                membersActivityRecord =new MembersActivityRecord();
+        try {
+            MembersActivityRecord membersActivityRecord = membersActivityRecordService.getByProerties("activity_record_id", activityRecordId);
+            if (membersActivityRecord == null) {
+                membersActivityRecord = new MembersActivityRecord();
                 membersActivityRecord.setMember_id(memberId);
                 membersActivityRecord.setActivity_record_id(activityRecordId);
                 membersActivityRecord.setGroupId(groupId);
                 membersActivityRecord.setCreateTime(new Date());
                 membersActivityRecordService.persist(membersActivityRecord);
-                apiResponse=new ApiResponse<Void>("0","success");
-            }else{
-                apiResponse=new ApiResponse<Void>("1","请不要重复报名!");
+                apiResponse = new ApiResponse<Void>("0", "success");
+            } else {
+                apiResponse = new ApiResponse<Void>("1", "请不要重复报名!");
             }
 
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            apiResponse=new ApiResponse<Void>("1","fail");
+            apiResponse = new ApiResponse<Void>("1", "fail");
         }
+        String json = JSON.toJSONString(apiResponse);
+        ResponseUtils.renderJson(response, json);
+
+    }
+
+
+    @RequestMapping(value = "/createActivityRecord.do", method = {RequestMethod.POST, RequestMethod.GET})
+    public void createActivityRecord(HttpServletRequest request, HttpServletResponse response, String date, String chargePerson, String contactNumber, String playFieldNum, String startTime, String endTime, String venue, Integer groupId) throws ParseException {
+        ApiResponse<ActivityRecordBean> apiResponse = null;
+        ActivityRecord entity = null;
+        try {
+
+            ActivityRecord activityRecord = activityRecordService.getByProerties(new String[]{"date", "groupId"}, new Object[]{format.parse(date), groupId});
+            if (activityRecord == null) {
+                entity = new ActivityRecord();
+                entity.setDate(format.parse(date));
+                entity.setChargePerson(chargePerson);
+                entity.setPlayFieldNum(Integer.parseInt(playFieldNum == null ? "1" : playFieldNum));
+                entity.setStartTime(format2.parse(startTime));
+                entity.setEndTime(format2.parse(endTime));
+                entity.setVenue(venue);
+                entity.setGroupId(groupId);
+                entity.setContactNumber(contactNumber);
+                entity.setStatus("un_start");
+                activityRecordService.persist(entity);
+
+                apiResponse = new ApiResponse<ActivityRecordBean>("0", "success");
+            } else {
+                apiResponse = new ApiResponse<ActivityRecordBean>("0", "该日期已经存在活动");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            apiResponse = new ApiResponse<ActivityRecordBean>("1", "发起活动失败!");
+        }
+
+        ActivityRecordBean record = new ActivityRecordBean();
+        if (entity != null) {
+            record.setId(entity.getId());
+            record.setPersons(new ArrayList<RegistrationPersonBean>());
+            record.setStartTime(format2.format(entity.getStartTime()));
+            record.setEndTime(format2.format(entity.getEndTime()));
+            record.setDate(format.format(entity.getDate()));
+            record.setVenue(entity.getVenue());
+            record.setDate_week(getWeekDayByDate(entity.getDate()));
+            record.setChargePerson(entity.getChargePerson());
+            record.setContactNumber(entity.getContactNumber());
+            record.setStatus(getStatusByCode(entity.getStatus()));
+        }
+        apiResponse.setObj(record);
         String json = JSON.toJSONString(apiResponse);
         ResponseUtils.renderJson(response, json);
 
@@ -154,16 +204,16 @@ public class ActivityRecordController {
 
     }
 
-    private String getStatusByCode(String statusCode){
-        String status="";
-        if(statusCode.equals("un_start")){
-            status="未开始";
-        }else if(statusCode.equals("started")){
-            status="已开始";
-        }else if(statusCode.equals("ended")){
-            status="已结束";
-        }else if(statusCode.equals("cancle")){
-            status="已取消";
+    private String getStatusByCode(String statusCode) {
+        String status = "";
+        if (statusCode.equals("un_start")) {
+            status = "未开始";
+        } else if (statusCode.equals("started")) {
+            status = "已开始";
+        } else if (statusCode.equals("ended")) {
+            status = "已结束";
+        } else if (statusCode.equals("cancle")) {
+            status = "已取消";
         }
 
 
