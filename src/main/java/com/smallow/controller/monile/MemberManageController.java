@@ -31,11 +31,11 @@ public class MemberManageController {
         Member member = memberService.getByProerties(new String[]{"mobile", "pwd"}, new String[]{mobile, pwd});
         ApiResponse<Member> apiResponse=null;
         if(member!=null){
-            apiResponse=new ApiResponse<Member>("0","success");
+            apiResponse=new ApiResponse<Member>("0","登陆成功");
             apiResponse.setObj(member);
 
         }else{
-            apiResponse=new ApiResponse<Member>("1","fail");
+            apiResponse=new ApiResponse<Member>("1","登陆失败,请检查手机号密码是否填写正确!");
         }
 
         String json= JSON.toJSONString(apiResponse);

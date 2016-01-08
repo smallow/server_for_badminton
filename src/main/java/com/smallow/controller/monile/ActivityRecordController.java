@@ -33,6 +33,7 @@ import java.util.List;
 public class ActivityRecordController {
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     private SimpleDateFormat format2 = new SimpleDateFormat("HH:mm");
+    private SimpleDateFormat format3 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     @Resource
     private ActivityRecordService activityRecordService;
 
@@ -120,7 +121,7 @@ public class ActivityRecordController {
         ApiResponse<Void> apiResponse = null;
 
         try {
-            MembersActivityRecord membersActivityRecord = membersActivityRecordService.getByProerties("activity_record_id", activityRecordId);
+            MembersActivityRecord membersActivityRecord = membersActivityRecordService.getByProerties(new String[]{"activity_record_id","member_id"}, new Object[]{activityRecordId,memberId});
             if (membersActivityRecord == null) {
                 membersActivityRecord = new MembersActivityRecord();
                 membersActivityRecord.setMember_id(memberId);
@@ -145,7 +146,7 @@ public class ActivityRecordController {
 
 
     @RequestMapping(value = "/createActivityRecord.do", method = {RequestMethod.POST, RequestMethod.GET})
-    public void createActivityRecord(HttpServletRequest request, HttpServletResponse response, String date, String chargePerson, String contactNumber, String playFieldNum, String startTime, String endTime, String venue, Integer groupId) throws ParseException {
+    public void createActivityRecord(HttpServletRequest request, HttpServletResponse response, String date, String chargePerson, String contactNumber, String playFieldNum, String startTime, String endTime, String venue, Integer groupId,Integer createPersonId) throws ParseException {
         ApiResponse<ActivityRecordBean> apiResponse = null;
         ActivityRecord entity = null;
         try {
@@ -155,16 +156,18 @@ public class ActivityRecordController {
                 entity = new ActivityRecord();
                 entity.setDate(format.parse(date));
                 entity.setChargePerson(chargePerson);
-                entity.setPlayFieldNum(Integer.parseInt(playFieldNum == null ? "1" : playFieldNum));
-                entity.setStartTime(format2.parse(startTime));
-                entity.setEndTime(format2.parse(endTime));
+                //entity.setPlayFieldNum(Integer.parseInt(playFieldNum == null ? "1" : playFieldNum));
+                entity.setStartTime(format3.parse(startTime));
+                entity.setEndTime(format3.parse(endTime));
                 entity.setVenue(venue);
                 entity.setGroupId(groupId);
                 entity.setContactNumber(contactNumber);
                 entity.setStatus("un_start");
+                entity.setCreatePersonId(createPersonId);
+                entity.setCreateTime(new Date());
                 activityRecordService.persist(entity);
 
-                apiResponse = new ApiResponse<ActivityRecordBean>("0", "success");
+                apiResponse = new ApiResponse<ActivityRecordBean>("0", "活动发布成功");
             } else {
                 apiResponse = new ApiResponse<ActivityRecordBean>("0", "该日期已经存在活动");
             }

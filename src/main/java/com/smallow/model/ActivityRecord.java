@@ -58,6 +58,13 @@ public class ActivityRecord extends ActivityRecordParameter {
     @Column
     private String venue;//球馆
 
+    @Column
+    private Integer createPersonId;//活动发起人ID
+
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createTime;//活动创建时间
+
     public Integer getId() {
         return id;
     }
@@ -178,5 +185,22 @@ public class ActivityRecord extends ActivityRecordParameter {
 
     public void setVenue(String venue) {
         this.venue = venue;
+    }
+
+    public Integer getCreatePersonId() {
+        return createPersonId;
+    }
+
+    public void setCreatePersonId(Integer createPersonId) {
+        this.createPersonId = createPersonId;
+    }
+
+    @JsonSerialize(using = DateTimeSerializer.class)
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }
